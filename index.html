@@ -3,40 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Harga Barang</title>
+  <title>Daftar Harga Warung</title>
 </head>
 <body>
-  <h1>Daftar Harga Barang Warung</h1>
-  <table id="priceTable">
-    <tr>
-      <th>Nama Barang</th>
-      <th>Harga Barang</th>
-      <th>Kategori Barang</th>
-    </tr>
+  <h1>Daftar Harga Warung</h1>
+  <table id="hargaTable">
+    <thead>
+      <tr>
+        <th>Nama Barang</th>
+        <th>Harga</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan dimasukkan ke sini menggunakan JavaScript -->
+    </tbody>
   </table>
 
   <script>
-    // Ganti dengan URL API Anda yang didapatkan dari Apps Script
-    const apiUrl = 'https://script.google.com/macros/s/AKfycbwPvFCocaGuJzQsbuO2S9BWzOGUoxdzuRXP00fp0POE9UEom2Cqm9rwMPS34fvgoiyRNg/exec';
-    
-    // Mengambil data dari Google Sheets
-    fetch(apiUrl)
+    // Gantilah URL di bawah dengan URL JSON Anda
+    const sheetUrl = 'https://spreadsheets.google.com/feeds/list/1qagMNx_wzp4ddwECbVEqbvPBB0mcyaNJM6zQsnNE5po/od6/public/values?alt=json';
+
+    fetch(sheetUrl)
       .then(response => response.json())
       .then(data => {
-        const table = document.getElementById('priceTable');
+        const entries = data.feed.entry;
+        const tableBody = document.querySelector('#hargaTable tbody');
         
-        data.forEach(item => {
-          const row = table.insertRow();
-          const cell1 = row.insertCell(0);
-          const cell2 = row.insertCell(1);
-          const cell3 = row.insertCell(2);
+        entries.forEach(entry => {
+          const row = document.createElement('tr');
           
-          cell1.textContent = item.nama_barang;
-          cell2.textContent = item.harga_barang;
-          cell3.textContent = item.kategori_barang;
+          const namaBarang = entry.gsx$namabarang.$t; // Pastikan nama kolom di Google Sheets sesuai
+          const harga = entry.gsx$harga.$t;           // Pastikan nama kolom di Google Sheets sesuai
+          
+          row.innerHTML = `<td>${namaBarang}</td><td>${harga}</td>`;
+          tableBody.appendChild(row);
         });
       })
-      .catch(error => console.log('Error:', error));
+      .catch(error => console.error('Error fetching data:', error));
   </script>
 </body>
 </html>
