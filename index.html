@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Harga Barang</title>
+</head>
+<body>
+  <h1>Daftar Harga Barang Warung</h1>
+  <table id="priceTable">
+    <tr>
+      <th>Nama Barang</th>
+      <th>Harga Barang</th>
+      <th>Kategori Barang</th>
+    </tr>
+  </table>
+
+  <script>
+    // Ganti dengan URL API Anda yang didapatkan dari Apps Script
+    const apiUrl = 'https://script.google.com/macros/s/AKfycbwPvFCocaGuJzQsbuO2S9BWzOGUoxdzuRXP00fp0POE9UEom2Cqm9rwMPS34fvgoiyRNg/exec';
+    
+    // Mengambil data dari Google Sheets
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const table = document.getElementById('priceTable');
+        
+        data.forEach(item => {
+          const row = table.insertRow();
+          const cell1 = row.insertCell(0);
+          const cell2 = row.insertCell(1);
+          const cell3 = row.insertCell(2);
+          
+          cell1.textContent = item.nama_barang;
+          cell2.textContent = item.harga_barang;
+          cell3.textContent = item.kategori_barang;
+        });
+      })
+      .catch(error => console.log('Error:', error));
+  </script>
+</body>
+</html>
